@@ -1,49 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import Dashboard from './components/Dashboard/Dashboard';
 import './App.scss';
-import type { ZontDevice } from './utils/interfaces/zont-devices.interface';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import LoginPage from './components/LoginPage/LoginPage';
+import DashboardContainer from './components/containers/DashboardContainer';
+import { AuthenticatedPage } from './components/AuthenticatedPage';
 
 const App: React.FC = () => {
-  const [devices, setDevices] = useState<ZontDevice[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch(
-          'https://zont-gresk.ru/api/zont-proxy.php'
-        );
-
-        if (!response.ok) throw new Error('Ошибка загрузки данных');
-
-        const data = await response.json();
-        setDevices(data.devices);
-        setLoading(false);
-      } catch (err: unknown) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else if (typeof err === 'string') {
-          setError(err);
-        } else {
-          setError('Произошла неизвестная ошибка');
-        }
-        setLoading(false);
-      }
-    }
-
-    fetchData();
-    const interval = setInterval(fetchData, 300000);
-    return () => clearInterval(interval);
-  }, []);
-
-  if (loading) return <p className="card-list__message">Загрузка данных...</p>;
-  if (error) return <p className="card-list__message">Ошибка: {error}</p>;
-
   return (
-    <div className="app">
-      <Dashboard devices={devices} />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route
+          path="/dashboard"
+          element={
+            <AuthenticatedPage>
+              <DashboardContainer />
+            </AuthenticatedPage>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
   );
 };
 export default App;

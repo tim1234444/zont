@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import Card from '../Card/Card';
 import './Dashboard.scss';
 import type { ZontDevice } from '../../utils/interfaces/zont-devices.interface';
@@ -59,25 +58,6 @@ const SENSOR_NAME_MAP: Record<string, Record<string, string>> = {
 };
 
 const Dashboard: React.FC<DashboardProps> = ({ devices }) => {
-  const [cachedDevices, setCachedDevices] = useState<ZontDevice[]>(devices);
-
-  useEffect(() => {
-    if (devices.length > 0) {
-      setCachedDevices((prev) => {
-        const newCache = [...prev];
-        devices.forEach((device) => {
-          const index = newCache.findIndex((d) => d.id === device.id);
-          if (index !== -1) {
-            newCache[index] = device;
-          } else {
-            newCache.push(device);
-          }
-        });
-        return newCache;
-      });
-    }
-  }, [devices]);
-
   const findSensorsByTypeAndKeywords = (
     device: ZontDevice,
     type: string,
@@ -101,10 +81,7 @@ const Dashboard: React.FC<DashboardProps> = ({ devices }) => {
 
   const getDisplayDevice = (deviceName: string): ZontDevice | undefined => {
     const current = devices.find((d) => d.name.trim() === deviceName);
-    if (current && current.online) return current;
-
-    const cached = cachedDevices.find((d) => d.name.trim() === deviceName);
-    return cached;
+    if (current) return current;
   };
 
   const getRangesForDevice = (device: ZontDevice) => {
