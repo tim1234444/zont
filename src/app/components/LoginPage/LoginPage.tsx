@@ -28,7 +28,7 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="login-container">
+    <div className="login-container container">
       <form className="login-form" onSubmit={handleSubmit}>
         <label className="login-label">Пароль</label>
         <input

@@ -21,7 +21,11 @@ export const AuthenticatedPage = ({ children }: AuthenticatedPageProps) => {
   }, []);
 
   if (loading) {
-    return <div>Загрузка...</div>;
+    return (
+      <div className="container">
+        <div>Загрузка...</div>
+      </div>
+    );
   }
 
   if (!isAuthenticated) {

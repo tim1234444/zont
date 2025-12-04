@@ -1,0 +1,82 @@
+.full-card {
+  background: #2c3e50;
+  color: #ffffff;
+  padding: 20px;
+  border-radius: 14px;
+ max-width:  330px;
+ width: 100%;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  font-family: "Inter", sans-serif;
+}
+
+.full-title {
+  margin: 0 0 16px;
+  font-size: 20px;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  padding-bottom: 8px;
+}
+
+.full-block {
+  margin-bottom: 26px;
+}
+
+.full-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  opacity: 0.9;
+  margin-bottom: 6px;
+}
+
+.full-number {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.full-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 6px;
+  background: #d5d7d8;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.full-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  background: #fff;
+  border-radius: 50%;
+  border: 2px solid #1d2935;
+ 
+  transition: 0.15s ease;
+}
+.full-slider::-webkit-slider-thumb:hover {
+  background: #f1f1f1;
+}
+
+.full-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.full-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #34495e;
+  border: none;
+  color: white;
+  width: 40px;
+  height: 36px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.15s ease;
+}
+
+.full-btn:hover {
+  background: #3f5870;
+}

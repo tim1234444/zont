@@ -1,7 +1,5 @@
 .dashboard {
-  padding: 20px;
   font-family: 'Segoe UI', Arial, sans-serif;
-  min-height: 100vh;
 }
 
 .dashboard__title {
@@ -15,16 +13,17 @@
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  max-width: 1600px;
   margin: 0 auto;
+  padding: 10px;
 }
+
 
 .block {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  max-width: 1600px;
 }
+
 
 .block--primary {
   background-color: #d2e8f9;

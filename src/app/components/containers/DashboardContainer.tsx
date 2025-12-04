@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import type { ZontDevice } from '../../utils/interfaces/zont-devices.interface';
 import Dashboard from '../Dashboard/Dashboard';
+import { SensorsPanel } from '../SensorsPanel/SensorsPanel';
 
 export default function DashboardContainer() {
   const [devices, setDevices] = useState<ZontDevice[]>([]);
@@ -35,12 +36,22 @@ export default function DashboardContainer() {
     const interval = setInterval(fetchData, 300000);
     return () => clearInterval(interval);
   }, []);
-
-  if (loading) return <p className="card-list__message">Загрузка данных...</p>;
-  if (error) return <p className="card-list__message">Ошибка: {error}</p>;
+  if (loading)
+    return (
+      <div className="container">
+        <p className="card-list__message">Загрузка данных...</p>
+      </div>
+    );
+  if (error)
+    return (
+      <div className="container">
+        <p className="card-list__message">Ошибка: {error}</p>
+      </div>
+    );
   return (
     <div className="app">
       <Dashboard devices={devices} />
+      <SensorsPanel />
     </div>
   );
 }

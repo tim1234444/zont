@@ -12,16 +12,9 @@ interface CardProps {
     unit?: string;
     triggered?: boolean;
   }>;
-  ranges: Record<string, { min?: number; max?: number }>;
 }
 
-const Card: React.FC<CardProps> = ({
-  device,
-  title,
-  type,
-  sensors,
-  ranges,
-}) => {
+const Card: React.FC<CardProps> = ({ device, title, type, sensors }) => {
   const getDeviceStatus = () => {
     return device.online
       ? { icon: '🟢', label: 'На связи' }
@@ -44,20 +37,8 @@ const Card: React.FC<CardProps> = ({
       <div className="card__sensors">
         {sensors.length > 0 ? (
           sensors.map((sensor, index) => {
-            const originalName = sensor.name.trim();
-            const range = ranges[originalName] || {};
-
-            const isOutOfRange =
-              sensor.value !== undefined &&
-              range.min !== undefined &&
-              range.max !== undefined &&
-              (sensor.value < range.min || sensor.value > range.max);
-
-            const hasTriggered = sensor.triggered === true;
-            const color = hasTriggered || isOutOfRange ? 'red' : '#333';
-
             return (
-              <div key={index} className="sensor" style={{ color }}>
+              <div key={index} className="sensor" style={{ color: '#333' }}>
                 <div>
                   <div className="sensor__value">
                     {sensor.value ?? '—'} {sensor.unit ?? ''}

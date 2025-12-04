@@ -1,10 +1,15 @@
+@use "./reset.scss";
 #root {
-  max-width: 1280px;
   width: 100%;
-  margin: 0 auto;
   padding: 1rem;
 }
 
 body {
   background-color: #f7f9fc;
+}
+.container{
+  padding: 20px;
+
+  margin: 0 auto;
+  max-width: 1312px;
 }

@@ -1,0 +1,32 @@
+.full-save-btn {
+    width: 100%;
+    padding: 12px 0;
+    background: #1abc9c; 
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 12px;
+    transition: background 0.15s ease, transform 0.15s ease;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+    font-family: "Inter", sans-serif;
+  }
+  
+  .full-save-btn:hover {
+    background: #17a78a;
+    transform: translateY(-1px);
+  }
+  
+  .full-save-btn:active {
+    transform: translateY(0px);
+  }
+  
+  .full-save-btn:disabled {
+    background: #3d5565;
+    cursor: not-allowed;
+    transform: none;
+    opacity: 0.75;
+  }
+  
