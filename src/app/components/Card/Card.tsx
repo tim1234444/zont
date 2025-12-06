@@ -5,7 +5,6 @@ import type { ZontDevice } from '../../utils/interfaces/zont-devices.interface';
 interface CardProps {
   device: ZontDevice;
   title: string;
-  type: 'teplo' | 'vzu';
   sensors: Array<{
     name: string;
     value?: number;
@@ -14,7 +13,7 @@ interface CardProps {
   }>;
 }
 
-const Card: React.FC<CardProps> = ({ device, title, type, sensors }) => {
+const Card: React.FC<CardProps> = ({ device, title, sensors }) => {
   const getDeviceStatus = () => {
     return device.online
       ? { icon: '🟢', label: 'На связи' }
@@ -25,7 +24,7 @@ const Card: React.FC<CardProps> = ({ device, title, type, sensors }) => {
 
   return (
     <div
-      className={`card card--${type} ${!device.online ? 'card--offline' : ''}`}
+      className={`card  ${!device.online ? 'card--offline' : ''}`}
     >
       <div className="card__header">
         <h3>{title}</h3>

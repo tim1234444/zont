@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { updateThresholdValue } from "../../../services/ensorThresholdService";
+import { updateThresholdValue } from "../../../services/updatingValues";
 import "./ChangeThresholdButton.scss"
 type Props = {
   name: string;

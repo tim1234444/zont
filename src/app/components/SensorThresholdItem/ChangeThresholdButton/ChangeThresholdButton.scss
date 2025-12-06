@@ -1,6 +1,7 @@
 .full-save-btn {
     width: 100%;
     padding: 12px 0;
+
     background: #1abc9c; 
     color: #ffffff;
     font-size: 15px;
@@ -8,7 +9,7 @@
     border: none;
     border-radius: 10px;
     cursor: pointer;
-    margin-top: 12px;
+    margin-top: auto;
     transition: background 0.15s ease, transform 0.15s ease;
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
     font-family: "Inter", sans-serif;

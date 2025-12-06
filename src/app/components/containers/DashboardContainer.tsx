@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import type { ZontDevice } from '../../utils/interfaces/zont-devices.interface';
 import Dashboard from '../Dashboard/Dashboard';
 import { SensorsPanel } from '../SensorsPanel/SensorsPanel';
+import { HeatingSeasonCard } from '../HeatingSeasonCard/HeatingSeasonCard';
 
 export default function DashboardContainer() {
   const [devices, setDevices] = useState<ZontDevice[]>([]);
@@ -51,7 +52,10 @@ export default function DashboardContainer() {
   return (
     <div className="app">
       <Dashboard devices={devices} />
-      <SensorsPanel />
+      <div className="sensors-panel container">
+        <SensorsPanel />
+        <HeatingSeasonCard />
+      </div>
     </div>
   );
 }

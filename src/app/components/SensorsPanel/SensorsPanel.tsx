@@ -2,12 +2,15 @@ import React, { useEffect, useState } from 'react';
 
 import './SensorsPanel.scss';
 import { SensorThreshold } from '../SensorThresholdItem/SensorThreshold';
+import { useAppState } from '../../context/useAppState';
 interface ThresholdItem {
   name: string;
   min: number;
-  max: number; 
+  max: number;
 }
 export const SensorsPanel: React.FC = () => {
+  const { updateThreshold } = useAppState();
+
   const [thresholdValues, setThresholdValues] = useState<ThresholdItem[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -15,7 +18,7 @@ export const SensorsPanel: React.FC = () => {
     async function fetchData() {
       try {
         const res = await fetch(
-          'https://zont-gresk.ru/api/thresholdValues.php?route=getData',
+          'https://zont-gresk.ru/api/updatingValues.php?route=getThresholdValues',
           {
             method: 'GET',
           }
@@ -24,6 +27,10 @@ export const SensorsPanel: React.FC = () => {
         if (!res.ok) throw new Error('Ошибка запроса: ' + res.status);
 
         const json = await res.json();
+
+        json.forEach((t: ThresholdItem) =>
+          updateThreshold(t.name, t.min, t.max)
+        );
         setThresholdValues(json.data);
         setError('');
       } catch (err: unknown) {
@@ -37,8 +44,6 @@ export const SensorsPanel: React.FC = () => {
       }
     }
     fetchData();
-    
-   
   }, []);
   if (loading)
     return (
@@ -53,7 +58,7 @@ export const SensorsPanel: React.FC = () => {
       </div>
     );
   return (
-    <div className="sensors-panel container">
+    <>
       {thresholdValues &&
         thresholdValues.map((sensor) => (
           <SensorThreshold
@@ -63,7 +68,6 @@ export const SensorsPanel: React.FC = () => {
             maxInitialValue={sensor.max}
           />
         ))}
-      
-    </div>
+    </>
   );
 };
