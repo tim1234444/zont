@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { updateThresholdValue } from "../../../services/updatingValues";
-import "./ChangeThresholdButton.scss"
+import { useState } from 'react';
+import { updateThresholdValue } from '../../../services/updatingValues';
+import './ChangeThresholdButton.scss';
 type Props = {
   name: string;
   newMinValue: number;
@@ -23,12 +23,8 @@ export default function ChangeThresholdButton({
   };
 
   return (
-    <button
-      onClick={handleClick}
-      disabled={loading}
-      className="full-save-btn"
-    >
-      {loading ? "Сохраняю..." : "Сохранить значения"}
+    <button onClick={handleClick} disabled={loading} className="full-save-btn">
+      {loading ? 'Сохраняю...' : 'Сохранить значения'}
     </button>
   );
 }

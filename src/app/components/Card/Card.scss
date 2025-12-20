@@ -87,3 +87,13 @@
   color: #ccc;
   font-size: 14px;
 }
+@keyframes blink-red {
+  0% { color: red; }
+  50% { color: transparent; }
+  100% { color: red; }
+}
+
+.sensor__value--alert {
+  animation: blink-red 2s infinite;
+  font-weight: bold;
+}

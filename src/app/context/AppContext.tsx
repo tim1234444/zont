@@ -4,7 +4,7 @@ import { type AppState, type Threshold, type HeatingSeason } from './types';
 interface AppContextProps {
   state: AppState;
   setState: React.Dispatch<React.SetStateAction<AppState>>;
-  updateThreshold: (name: string, newMin: number, newMax: number) => void;
+  updateThreshold: (newThresholds:Threshold[]) => void;
   updateHeatingSeason: (season: HeatingSeason) => void;
 }
 
@@ -22,12 +22,10 @@ interface AppProviderProps {
 export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [state, setState] = useState<AppState>(defaultState);
 
-  const updateThreshold = (name: string, newMin: number, newMax: number) => {
+  const updateThreshold = (newThresholds: Threshold[] ) => {
     setState(prev => ({
       ...prev,
-      thresholds: prev.thresholds.map(t =>
-        t.name === name ? { ...t, min: newMin, max: newMax } : t
-      ),
+      thresholds: newThresholds
     }));
   };
 

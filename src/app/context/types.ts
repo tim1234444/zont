@@ -1,7 +1,7 @@
 export interface Threshold {
     name: string;
-    min: number;
-    max: number;
+    min: string;
+    max: string;
   }
   
   export interface HeatingSeason {

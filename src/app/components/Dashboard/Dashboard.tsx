@@ -1,10 +1,8 @@
 import Card from '../Card/Card';
 import './Dashboard.scss';
 import type { ZontDevice } from '../../utils/interfaces/zont-devices.interface';
+import { useEffect, useState } from 'react';
 
-interface DashboardProps {
-  devices: ZontDevice[];
-}
 const DEVICES_INFO = {
   honeyValley: [
     {
@@ -89,12 +87,56 @@ const DEVICES_INFO = {
   ],
 };
 
-const Dashboard: React.FC<DashboardProps> = ({ devices }) => {
+const Dashboard: React.FC = () => {
+  const [devices, setDevices] = useState<ZontDevice[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch(
+          'https://zont-gresk.ru/api/zont-proxy.php'
+        );
+
+        if (!response.ok) throw new Error('Ошибка загрузки данных');
+
+        const data = await response.json();
+        setDevices(data.devices);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else if (typeof err === 'string') {
+          setError(err);
+        } else {
+          setError('Произошла неизвестная ошибка');
+        }
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchData();
+    const interval = setInterval(fetchData, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
   const getDisplayDevice = (deviceName: string): ZontDevice | undefined => {
     const current = devices.find((d) => d.name.trim() === deviceName);
     if (current) return current;
   };
-
+  if (loading)
+    return (
+      <div className="container">
+        <p className="card-list__message">Загрузка данных...</p>
+      </div>
+    );
+  if (error)
+    return (
+      <div className="container">
+        <p className="card-list__message">Ошибка: {error}</p>
+      </div>
+    );
   return (
     <div className="dashboard container">
       <h1 className="dashboard__title">Мониторинг показателей</h1>
@@ -151,28 +193,28 @@ const Dashboard: React.FC<DashboardProps> = ({ devices }) => {
             );
           })}
         </div>
-          {DEVICES_INFO.separate.map((device) => {
-            const deviceInfo = getDisplayDevice(device.apiName);
-            if (!deviceInfo) return null;
-            return (
-              <Card
-                key={device.apiName}
-                device={deviceInfo}
-                title={device.pageName}
-                sensors={deviceInfo.sensors
-                  .filter((s) =>
-                    Object.keys(device.sensors).includes(s.name.trim())
-                  )
-                  .map((sensor) => ({
-                    ...sensor,
-                    name:
-                      device.sensors[
-                        sensor.name.trim() as keyof typeof device.sensors
-                      ] || sensor.name,
-                  }))}
-              />
-            );
-          })}
+        {DEVICES_INFO.separate.map((device) => {
+          const deviceInfo = getDisplayDevice(device.apiName);
+          if (!deviceInfo) return null;
+          return (
+            <Card
+              key={device.apiName}
+              device={deviceInfo}
+              title={device.pageName}
+              sensors={deviceInfo.sensors
+                .filter((s) =>
+                  Object.keys(device.sensors).includes(s.name.trim())
+                )
+                .map((sensor) => ({
+                  ...sensor,
+                  name:
+                    device.sensors[
+                      sensor.name.trim() as keyof typeof device.sensors
+                    ] || sensor.name,
+                }))}
+            />
+          );
+        })}
       </div>
     </div>
   );

@@ -3,7 +3,7 @@ import './HeatingSeasonCard.scss';
 import ChangeHeatingSeasonButton from './ChangeHeatingSeasonButton/ChangeHeatingSeasonButton';
 import { useAppState } from '../../context/useAppState';
 export const HeatingSeasonCard = () => {
-  const {updateHeatingSeason } = useAppState();
+  const { updateHeatingSeason } = useAppState();
 
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -21,11 +21,14 @@ export const HeatingSeasonCard = () => {
           updateHeatingSeason(data.data);
           setStartDate(data.data.heating_start_date);
           setEndDate(data.data.heating_end_date);
+        } else if (!data.ok) {
+          console.error(data.message);
         }
       } catch (e) {
         console.error(e);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     loadSeason();

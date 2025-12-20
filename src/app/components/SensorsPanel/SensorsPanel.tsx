@@ -27,10 +27,7 @@ export const SensorsPanel: React.FC = () => {
         if (!res.ok) throw new Error('Ошибка запроса: ' + res.status);
 
         const json = await res.json();
-
-        json.forEach((t: ThresholdItem) =>
-          updateThreshold(t.name, t.min, t.max)
-        );
+        updateThreshold(json.data);
         setThresholdValues(json.data);
         setError('');
       } catch (err: unknown) {

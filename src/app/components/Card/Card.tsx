@@ -1,19 +1,29 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import './Card.scss';
-import type { ZontDevice } from '../../utils/interfaces/zont-devices.interface';
-
+import type {
+  ZontDevice,
+  ZontSensor,
+} from '../../utils/interfaces/zont-devices.interface';
+import { useAppState } from '../../context/useAppState';
+import alarmSound from '../../../assets/alarm.mp3';
+import { CardSensor } from '../CardSensor/CardSensor';
 interface CardProps {
   device: ZontDevice;
   title: string;
-  sensors: Array<{
-    name: string;
-    value?: number;
-    unit?: string;
-    triggered?: boolean;
-  }>;
+  sensors: ZontSensor[];
 }
 
 const Card: React.FC<CardProps> = ({ device, title, sensors }) => {
+  const { state } = useAppState();
+
+  const alarmRef = useRef<HTMLAudioElement | null>(null);
+  if (!alarmRef.current) {
+    alarmRef.current = new Audio(alarmSound);
+    alarmRef.current.loop = false;
+  }
+  
+  const wasOutOfRange = useRef(false);
+
   const getDeviceStatus = () => {
     return device.online
       ? { icon: '🟢', label: 'На связи' }
@@ -23,9 +33,7 @@ const Card: React.FC<CardProps> = ({ device, title, sensors }) => {
   const status = getDeviceStatus();
 
   return (
-    <div
-      className={`card  ${!device.online ? 'card--offline' : ''}`}
-    >
+    <div className={`card  ${!device.online ? 'card--offline' : ''}`}>
       <div className="card__header">
         <h3>{title}</h3>
         <span className="status-icon" title={status.label}>
@@ -36,15 +44,19 @@ const Card: React.FC<CardProps> = ({ device, title, sensors }) => {
       <div className="card__sensors">
         {sensors.length > 0 ? (
           sensors.map((sensor, index) => {
+            const threshold = state.thresholds.find(
+              (t) => t.name === sensor.name
+            );
+            if (!threshold) return null;
+
             return (
-              <div key={index} className="sensor" style={{ color: '#333' }}>
-                <div>
-                  <div className="sensor__value">
-                    {sensor.value ?? '—'} {sensor.unit ?? ''}
-                  </div>
-                  <div className="sensor__label">{sensor.name}</div>
-                </div>
-              </div>
+              <CardSensor
+                key={sensor.name ?? index}
+                sensor={sensor}
+                threshold={threshold}
+                alarmRef={alarmRef}
+                wasOutOfRange={wasOutOfRange}
+              />
             );
           })
         ) : (
