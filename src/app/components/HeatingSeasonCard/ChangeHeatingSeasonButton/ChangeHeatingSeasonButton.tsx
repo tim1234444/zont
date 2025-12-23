@@ -1,44 +1,54 @@
-import { useState } from 'react';
 import { updateHeatingSeason } from '../../../services/updatingValues';
+import { useQueryClient, useMutation } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 type Props = {
   startDate: string;
   endDate: string;
 };
+
 export default function ChangeHeatingSeasonButton({
   startDate,
   endDate,
 }: Props) {
-  const [loading, setLoading] = useState(false);
+  const queryClient = useQueryClient();
 
-  const saveSeason = async () => {
-    if (!startDate || !endDate) return;
+  const { mutate, isPending } = useMutation({
+    mutationFn: () => updateHeatingSeason(startDate, endDate),
+    onSuccess: (result) => {
+      if (result.ok) {
+        queryClient.invalidateQueries({ queryKey: ['heatingSeason'] });
+        toast.success('Даты отопительного сезона обновлены!');
+      }
+    },
+    onError: (err: unknown) => {
+      const message =
+        err instanceof Error ? err.message : 'Произошла неизвестная ошибка';
+      toast.error('Ошибка: ' + message);
+    },
+  });
 
+  const handleClick = () => {
+    if (!startDate || !endDate) {
+      toast.error('Пожалуйста, заполните обе даты');
+      return;
+    }
     if (startDate > endDate) {
-      alert('Дата начала позже даты окончания');
+      toast.error('Дата начала позже даты окончания');
       return;
     }
 
-    setLoading(true);
-
-    const result = await updateHeatingSeason(startDate, endDate);
-
-    if (result.ok) {
-      alert('Даты отопительного сезона обновлены!');
-    } else {
-      alert('Ошибка: ' + result.message);
-    }
-
-    setLoading(false);
+    mutate();
   };
+
   return (
     <>
       <button
         className="season-save-btn"
-        disabled={loading}
-        onClick={saveSeason}
+        disabled={isPending}
+        onClick={handleClick}
       >
-        {loading ? 'Сохранение…' : 'Сохранить'}
+        {isPending ? 'Сохранение…' : 'Сохранить'}
       </button>
     </>
   );

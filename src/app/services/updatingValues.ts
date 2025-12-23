@@ -1,14 +1,14 @@
-interface ChangeResponseSuccess {
+export interface ChangeResponseSuccess {
   ok: true;
   message: string;
 }
 
-interface ChangeResponseError {
+export interface ChangeResponseError {
   ok: false;
   message: string;
 }
 
-type ChangeResponse = ChangeResponseSuccess | ChangeResponseError;
+export type ChangeResponse = ChangeResponseSuccess | ChangeResponseError;
 
 export async function updateThresholdValue(
   name: string,
@@ -16,13 +16,16 @@ export async function updateThresholdValue(
   max: number
 ): Promise<ChangeResponse> {
   try {
-    const res = await fetch('https://zont-gresk.ru/api/updatingValues.php?route=changeThresholdValue', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name, min, max }),
-    });
+    const res = await fetch(
+      'https://zont-gresk.ru/api/updatingValues.php?route=changeThresholdValue',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, min, max }),
+      }
+    );
 
     if (!res.ok) {
       const errJson = (await res.json()) as ChangeResponse;
@@ -45,41 +48,31 @@ export async function updateThresholdValue(
   }
 }
 
-
-
 export async function updateHeatingSeason(
   heating_start_date: string,
   heating_end_date: string
 ): Promise<ChangeResponse> {
   try {
     const res = await fetch(
-      "https://zont-gresk.ru/api/updatingValues.php?route=updateHeatingSeason",
+      'https://zont-gresk.ru/api/updatingValues.php?route=updateHeatingSeason',
       {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ heating_start_date, heating_end_date }),
       }
     );
 
-    if (!res.ok) {
-      const errJson = (await res.json()) as ChangeResponse;
-      return errJson;
+    const data = (await res.json()) as ChangeResponse;
+
+    if (!res.ok || !data.ok) {
+      throw new Error(data.message || 'Ошибка обновления отопительного сезона');
     }
 
-    const data = (await res.json()) as ChangeResponse;
     return data;
   } catch (err: unknown) {
-    let message = "Неизвестная ошибка";
-
-    if (err instanceof Error) {
-      message = err.message;
-    }
-
-    return {
-      ok: false,
-      message,
-    };
+    const message = err instanceof Error ? err.message : 'Неизвестная ошибка';
+    return { ok: false, message };
   }
 }

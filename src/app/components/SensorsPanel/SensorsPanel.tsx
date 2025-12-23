@@ -1,57 +1,33 @@
-import React, { useEffect, useState } from 'react';
-
 import './SensorsPanel.scss';
 import { SensorThreshold } from '../SensorThresholdItem/SensorThreshold';
-import { useAppState } from '../../context/useAppState';
+import { useQuery } from '@tanstack/react-query';
+import { fetchThresholdValues } from '../../services/getValues';
 interface ThresholdItem {
   name: string;
   min: number;
   max: number;
 }
 export const SensorsPanel: React.FC = () => {
-  const { updateThreshold } = useAppState();
-
-  const [thresholdValues, setThresholdValues] = useState<ThresholdItem[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const res = await fetch(
-          'https://zont-gresk.ru/api/updatingValues.php?route=getThresholdValues',
-          {
-            method: 'GET',
-          }
-        );
-
-        if (!res.ok) throw new Error('Ошибка запроса: ' + res.status);
-
-        const json = await res.json();
-        updateThreshold(json.data);
-        setThresholdValues(json.data);
-        setError('');
-      } catch (err: unknown) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError('Неизвестная ошибка');
-        }
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchData();
-  }, []);
-  if (loading)
+  const {
+    data: thresholdValues,
+    isLoading,
+    isError,
+    error,
+  } = useQuery<ThresholdItem[]>({
+    queryKey: ['thresholdValues'],
+    queryFn: fetchThresholdValues,
+  });
+  
+  if (isLoading)
     return (
       <div className="container">
         <p className="card-list__message">Загрузка данных...</p>
       </div>
     );
-  if (error)
+  if (isError)
     return (
       <div className="container">
-        <p className="card-list__message">Ошибка: {error}</p>
+        <p className="card-list__message">Ошибка: {(error as Error).message}</p>
       </div>
     );
   return (

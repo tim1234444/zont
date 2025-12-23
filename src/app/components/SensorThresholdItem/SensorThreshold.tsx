@@ -24,7 +24,6 @@ export const SensorThreshold: React.FC<Props> = ({
     <div className="full-card">
       <h2 className="full-title">{title}</h2>
 
-      {/* MIN BLOCK */}
       <div className="full-block">
         <div className="full-info">
           <span>Минимум</span>

@@ -1,7 +1,8 @@
 import Card from '../Card/Card';
 import './Dashboard.scss';
 import type { ZontDevice } from '../../utils/interfaces/zont-devices.interface';
-import { useEffect, useState } from 'react';
+import { fetchDevices } from '../../services/getValues';
+import { useQuery } from '@tanstack/react-query';
 
 const DEVICES_INFO = {
   honeyValley: [
@@ -87,54 +88,31 @@ const DEVICES_INFO = {
   ],
 };
 
-const Dashboard: React.FC = () => {
-  const [devices, setDevices] = useState<ZontDevice[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch(
-          'https://zont-gresk.ru/api/zont-proxy.php'
-        );
-
-        if (!response.ok) throw new Error('Ошибка загрузки данных');
-
-        const data = await response.json();
-        setDevices(data.devices);
-      } catch (err: unknown) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else if (typeof err === 'string') {
-          setError(err);
-        } else {
-          setError('Произошла неизвестная ошибка');
-        }
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchData();
-    const interval = setInterval(fetchData, 60000);
-    return () => clearInterval(interval);
-  }, []);
+export default function Dashboard() {
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ['devices'],
+    queryFn: fetchDevices,
+    refetchInterval: 60_000,
+  });
+  const devices: ZontDevice[] = data ?? [];
 
   const getDisplayDevice = (deviceName: string): ZontDevice | undefined => {
     const current = devices.find((d) => d.name.trim() === deviceName);
     if (current) return current;
   };
-  if (loading)
+  if (isLoading)
     return (
       <div className="container">
         <p className="card-list__message">Загрузка данных...</p>
       </div>
     );
-  if (error)
+  if (isError)
     return (
       <div className="container">
-        <p className="card-list__message">Ошибка: {error}</p>
+        <p className="card-list__message">
+          {' '}
+          Ошибка: {(error as Error).message}
+        </p>
       </div>
     );
   return (
@@ -218,6 +196,4 @@ const Dashboard: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export default Dashboard;
+}

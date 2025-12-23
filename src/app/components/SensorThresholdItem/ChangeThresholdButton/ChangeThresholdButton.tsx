@@ -1,6 +1,7 @@
-import { useState } from 'react';
 import { updateThresholdValue } from '../../../services/updatingValues';
 import './ChangeThresholdButton.scss';
+import { toast } from 'sonner';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 type Props = {
   name: string;
   newMinValue: number;
@@ -12,19 +13,48 @@ export default function ChangeThresholdButton({
   newMinValue,
   newMaxValue,
 }: Props) {
-  const [loading, setLoading] = useState(false);
+  const queryClient = useQueryClient();
 
-  const handleClick = async () => {
-    setLoading(true);
+  const { mutate, isPending } = useMutation({
+    mutationFn: () => updateThresholdValue(name, newMinValue, newMaxValue),
 
-    await updateThresholdValue(name, newMinValue, newMaxValue);
+    onSuccess: (data) => {
+      if (data.ok) {
+        toast.success(data.message);
 
-    setLoading(false);
+        queryClient.invalidateQueries({
+          queryKey: ['thresholdValues'],
+        });
+      } else {
+        toast.error(data.message);
+      }
+    },
+
+    onError: (error) => {
+      const message =
+        error instanceof Error ? error.message : 'Произошла неизвестная ошибка';
+      toast.error('Ошибка: ' + message);
+    },
+  });
+
+  const handleClick = () => {
+    if (newMinValue >= newMaxValue) {
+      toast.error(
+        'Минимальное значение не может быть больше или равно максимальному'
+      );
+      return;
+    }
+
+    mutate();
   };
 
   return (
-    <button onClick={handleClick} disabled={loading} className="full-save-btn">
-      {loading ? 'Сохраняю...' : 'Сохранить значения'}
+    <button
+      onClick={handleClick}
+      disabled={isPending}
+      className="full-save-btn"
+    >
+      {isPending ? 'Сохраняю...' : 'Сохранить значения'}
     </button>
   );
 }

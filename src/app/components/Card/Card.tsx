@@ -4,24 +4,25 @@ import type {
   ZontDevice,
   ZontSensor,
 } from '../../utils/interfaces/zont-devices.interface';
-import { useAppState } from '../../context/useAppState';
 import alarmSound from '../../../assets/alarm.mp3';
 import { CardSensor } from '../CardSensor/CardSensor';
-interface CardProps {
+import { useQuery } from '@tanstack/react-query';
+import { fetchThresholdValues } from '../../services/getValues';
+import { useSpeechQueue } from '../../hooks/useSpeechQueue';
+type Props = {
   device: ZontDevice;
   title: string;
   sensors: ZontSensor[];
-}
+};
 
-const Card: React.FC<CardProps> = ({ device, title, sensors }) => {
-  const { state } = useAppState();
+const Card: React.FC<Props> = ({ device, title, sensors }) => {
+  const { data: thresholds } = useQuery({
+    queryKey: ['thresholdValues'],
+    queryFn: fetchThresholdValues,
+  });
 
-  const alarmRef = useRef<HTMLAudioElement | null>(null);
-  if (!alarmRef.current) {
-    alarmRef.current = new Audio(alarmSound);
-    alarmRef.current.loop = false;
-  }
-  
+  const speechQueue = useSpeechQueue();
+
   const wasOutOfRange = useRef(false);
 
   const getDeviceStatus = () => {
@@ -44,18 +45,17 @@ const Card: React.FC<CardProps> = ({ device, title, sensors }) => {
       <div className="card__sensors">
         {sensors.length > 0 ? (
           sensors.map((sensor, index) => {
-            const threshold = state.thresholds.find(
-              (t) => t.name === sensor.name
-            );
+            const threshold = thresholds?.find((t) => t.name === sensor.name);
             if (!threshold) return null;
 
             return (
               <CardSensor
+                title={title}
                 key={sensor.name ?? index}
                 sensor={sensor}
                 threshold={threshold}
-                alarmRef={alarmRef}
                 wasOutOfRange={wasOutOfRange}
+                speechQueue={speechQueue}
               />
             );
           })

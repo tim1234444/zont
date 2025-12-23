@@ -1,19 +1,23 @@
 import { useEffect } from 'react';
-import type { Threshold } from '../../context/types';
 import type { ZontSensor } from '../../utils/interfaces/zont-devices.interface';
+import type { ThresholdItem } from '../../services/getValues';
 
 type Props = {
+  title: string;
   sensor: ZontSensor;
-  threshold: Threshold;
-  alarmRef: React.RefObject<HTMLAudioElement | null>;
+  threshold: ThresholdItem;
   wasOutOfRange: React.RefObject<boolean>;
+  speechQueue: {
+    enqueue: (text: string) => void;
+  };
 };
 
 export const CardSensor: React.FC<Props> = ({
+  title,
   sensor,
   threshold,
-  alarmRef,
   wasOutOfRange,
+  speechQueue,
 }) => {
   if (sensor.value === null || sensor.value === undefined) return null;
 
@@ -26,20 +30,19 @@ export const CardSensor: React.FC<Props> = ({
   const isOutOfRange = isAboveMax || isBelowMin;
 
   useEffect(() => {
-    if (!alarmRef.current) return;
-   
     if (isOutOfRange && !wasOutOfRange.current) {
-      console.log("Все впорядке")
-      alarmRef.current?.play();
+      const message = isAboveMax
+        ? `Внимание! Датчик ${sensor.name}, объекта ${title} превысил верхний порог.`
+        : `Внимание! Датчик ${sensor.name}, объекта ${title} опустился ниже нижнего порога.`;
+
+      speechQueue.enqueue(message);
+
       wasOutOfRange.current = true;
     }
-
     if (!isOutOfRange && wasOutOfRange.current) {
-      alarmRef.current?.pause();
-      if (alarmRef.current) alarmRef.current.currentTime = 0;
       wasOutOfRange.current = false;
     }
-  }, [isOutOfRange, alarmRef, wasOutOfRange]);
+  }, [isOutOfRange]);
 
   return (
     <div className="sensor">

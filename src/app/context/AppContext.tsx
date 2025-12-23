@@ -37,8 +37,8 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   };
 
   return (
-    <AppContext.Provider value={{ state, setState, updateThreshold, updateHeatingSeason }}>
+    <AppContext value={{ state, setState, updateThreshold, updateHeatingSeason }}>
       {children}
-    </AppContext.Provider>
+    </AppContext>
   );
 };
