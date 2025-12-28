@@ -16,7 +16,6 @@ export const HeatingSeasonCard = () => {
     queryKey: ['heatingSeason'],
     queryFn: fetchHeatingSeason,
   });
-
   useEffect(() => {
     if (season) {
       setStartDate(season.heating_start_date || '');

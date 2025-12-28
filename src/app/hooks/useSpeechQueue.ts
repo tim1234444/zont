@@ -3,10 +3,8 @@ import { useCallback, useRef } from 'react';
 export function useSpeechQueue() {
   const queueRef = useRef<string[]>([]);
   const isSpeakingRef = useRef(false);
-  const voices = window.speechSynthesis.getVoices();
-  const voice = voices.find(
-    (v) => v.lang === 'ru-RU' && v.name.includes('Google')
-  );
+
+  
 
   const speakNext = useCallback(() => {
     if (isSpeakingRef.current) return;
@@ -16,7 +14,7 @@ export function useSpeechQueue() {
     if (!text) return;
 
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.voice = voice || null;
+    
     utterance.lang = 'ru-RU';
     utterance.rate = 1.3;
     utterance.pitch = 0.5;
@@ -38,7 +36,10 @@ export function useSpeechQueue() {
   }, []);
 
   const enqueue = useCallback(
+   
+
     (text: string) => {
+     
       if (!('speechSynthesis' in window)) return;
 
       queueRef.current.push(text);

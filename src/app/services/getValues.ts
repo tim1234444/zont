@@ -18,8 +18,11 @@ export const fetchDevices = async (): Promise<ZontDevice[]> => {
     }
   }
 };
-
-export const fetchHeatingSeason = async () => {
+export interface HeatingSeason{
+  heating_start_date: string;
+  heating_end_date: string;
+}
+export const fetchHeatingSeason = async (): Promise<HeatingSeason> => {
   try {
     const res = await fetch(
       'https://zont-gresk.ru/api/updatingValues.php?route=getHeatingSeason'

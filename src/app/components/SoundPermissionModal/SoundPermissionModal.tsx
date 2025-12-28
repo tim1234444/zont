@@ -1,11 +1,14 @@
-import { useContext, useRef } from 'react';
+import { useRef, useState } from 'react';
 import './SoundPermissionModal.scss';
 import alarmSound from '../../../assets/silent.wav';
-import { SoundContext } from '../../context/SoundsContext';
 import { toast } from 'sonner';
-export default function SoundPermissionModal() {
+type Props = {
+  soundEnabled: boolean;
+  setSoundEnabled: React.Dispatch<React.SetStateAction<boolean>>
+}
+export default function SoundPermissionModal({soundEnabled, setSoundEnabled}: Props) {
   const audioRef = useRef<HTMLAudioElement>(null);
-  const { soundEnabled, setSoundEnabled } = useContext(SoundContext);
+  
   const enableSound = async () => {
     try {
       if (!audioRef.current) return;

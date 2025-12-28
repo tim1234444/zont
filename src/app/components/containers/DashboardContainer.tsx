@@ -1,15 +1,17 @@
 import Dashboard from '../Dashboard/Dashboard';
 import { SensorsPanel } from '../SensorsPanel/SensorsPanel';
 import { HeatingSeasonCard } from '../HeatingSeasonCard/HeatingSeasonCard';
-import { useContext } from 'react';
-import { SoundContext } from '../../context/SoundsContext';
 import SoundPermissionModal from '../SoundPermissionModal/SoundPermissionModal';
+import { useState } from 'react';
+
+
 
 export default function DashboardContainer() {
-  const { soundEnabled } = useContext(SoundContext);
-  if (!soundEnabled) return <SoundPermissionModal/>;
+  const [soundEnabled, setSoundEnabled] = useState(false);
+  if(!soundEnabled) return <SoundPermissionModal soundEnabled={soundEnabled} setSoundEnabled={setSoundEnabled}/>
   return (
     <div className="app">
+      ;
       <Dashboard />
       <div className="sensors-panel container">
         <SensorsPanel />
