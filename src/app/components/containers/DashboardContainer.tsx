@@ -11,7 +11,6 @@ export default function DashboardContainer() {
   if(!soundEnabled) return <SoundPermissionModal soundEnabled={soundEnabled} setSoundEnabled={setSoundEnabled}/>
   return (
     <div className="app">
-      ;
       <Dashboard />
       <div className="sensors-panel container">
         <SensorsPanel />

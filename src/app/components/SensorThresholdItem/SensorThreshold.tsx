@@ -59,7 +59,6 @@ export const SensorThreshold: React.FC<Props> = ({
         </div>
       </div>
 
-      {/* MAX BLOCK */}
       <div className="full-block">
         <div className="full-info">
           <span>Максимум</span>
