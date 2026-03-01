@@ -3,23 +3,26 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import LoginPage from './components/LoginPage/LoginPage';
 import DashboardContainer from './components/containers/DashboardContainer';
 import { AuthenticatedPage } from './components/AuthenticatedPage';
+import { TTSProvider } from './services/TTSProvider';
 
 const App: React.FC = () => {
   return (
-    <BrowserRouter>
-      {' '}
-      <Routes>
-        <Route path="/" element={<LoginPage />} />
-        <Route
-          path="/dashboard"
-          element={
-            <AuthenticatedPage>
-              <DashboardContainer />
-            </AuthenticatedPage>
-          }
-        />
-      </Routes>
-    </BrowserRouter>
+    <TTSProvider>
+      <BrowserRouter>
+        {' '}
+        <Routes>
+          <Route path="/" element={<LoginPage />} />
+          <Route
+            path="/dashboard"
+            element={
+              <AuthenticatedPage>
+                <DashboardContainer />
+              </AuthenticatedPage>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
+    </TTSProvider>
   );
 };
 export default App;

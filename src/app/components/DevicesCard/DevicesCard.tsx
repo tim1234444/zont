@@ -4,11 +4,11 @@ import type {
   ZontSensor,
 } from '../../utils/interfaces/zont-devices.interface';
 import { DevicesSensor } from '../DevicesSensor/DevicesSensor';
-
-import { useSpeechQueue } from '../../hooks/useSpeechQueue';
+import {useTTSQueue} from '../../hooks/useTTSQueue.ts'
 import { useNotificationsMute } from '../../hooks/useNotificationsMute';
 import type { HeatingSeason, ThresholdItem } from '../../services/getValues';
 import { useRef, useEffect } from 'react';
+import { useTTS } from '../../services/TTSProvider.tsx';
 type Props = {
   device: ZontDevice;
   title: string;
@@ -26,8 +26,7 @@ const DevicesCard: React.FC<Props> = ({
   // Получение информации о том включены ли уведомления у карточки
   const { muted, toggle } = useNotificationsMute(title);
   // Хук для звуковых уведомлений
-  const speechQueue = useSpeechQueue();
-  // Получение статуса датчика
+  const { speak } = useTTS()  
   const status = device.online
     ? { icon: '🟢', label: 'На связи' }
     : { icon: '🔴', label: 'Оффлайн' };
@@ -41,13 +40,13 @@ const DevicesCard: React.FC<Props> = ({
 
     if (prevOnline !== device.online) {
       const message = device.online
-        ? `Устройство "${title}" снова на связи.`
-        : `Внимание! Устройство "${title}" оффлайн.`;
+        ? `Устройство, "${title}" снова на связи.`
+        : `Внимание! Устройство, "${title}" оффлайн.`;
 
-      speechQueue.enqueue(message);
+      speak(message);
       prevOnlineRef.current = device.online;
     }
-  }, [device.online, muted, title, speechQueue]);
+  }, [device.online, muted, title]);
   return (
     <div
       className={`card ${!device.online ? 'card--offline' : ''} ${muted ? 'card--disabled' : ''}`}
@@ -78,7 +77,7 @@ const DevicesCard: React.FC<Props> = ({
                 title={title}
                 sensor={sensor}
                 threshold={threshold}
-                speechQueue={speechQueue}
+                speak={speak}
                 muted={muted}
                 heatingSeason={heatingSeason}
               />

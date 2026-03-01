@@ -9,7 +9,7 @@ type Props = {
   title: string;
   sensor: ZontSensor;
   threshold: ThresholdItem;
-  speechQueue: { enqueue: (text: string) => void };
+  speak: (text: string) => void;
   muted: boolean;
   heatingSeason?: HeatingSeason;
 };
@@ -17,7 +17,7 @@ export const DevicesSensor: React.FC<Props> = ({
   title,
   sensor,
   threshold,
-  speechQueue,
+  speak,
   muted,
   heatingSeason,
 }) => {
@@ -36,7 +36,7 @@ export const DevicesSensor: React.FC<Props> = ({
       isOutOfRange: value < min || value > max,
     };
   }, [sensor.value, threshold.min, threshold.max]);
-  
+
   const isHeatingSeason = useMemo(() => {
     if (!heatingSeason) return false;
 
@@ -62,9 +62,11 @@ export const DevicesSensor: React.FC<Props> = ({
       return;
     }
     const message = isAboveMax
-      ? `Внимание! Датчик ${sensor.name}, объекта ${title} превысил верхний порог.`
-      : `Внимание! Датчик ${sensor.name}, объекта ${title} опустился ниже нижнего порога.`;
-    speechQueue.enqueue(message);
+      ? `Внимание! Датчик, ${sensor.name}, объекта, ${title}, превысил верхний порог.`
+      : `Внимание! Датчик, ${sensor.name}, объекта, ${title}, опустился ниже нижнего порога.`;
+
+    
+    speak(message);
     wasOutOfRange.current = true;
   }, [
     isOutOfRange,
@@ -73,11 +75,8 @@ export const DevicesSensor: React.FC<Props> = ({
     muted,
     sensor.name,
     title,
-    speechQueue,
     heatingSeason,
   ]);
-
-
 
   const showAlert =
     isOutOfRange &&

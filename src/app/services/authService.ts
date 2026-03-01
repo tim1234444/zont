@@ -4,7 +4,7 @@ export interface AuthCheckResponse {
 
 export const checkSession = async (): Promise<boolean> => {
   try {
-    const res = await fetch('https://zont-gresk.ru/api/login.php?route=check', {
+    const res = await fetch('/api/login.php?route=check', {
       credentials: 'include',
     });
 
@@ -25,7 +25,7 @@ export const login = async (
 }> => {
   try {
     const response = await fetch(
-      'https://zont-gresk.ru/api/login.php?route=login',
+      '/api/login.php?route=login',
       {
         method: 'POST',
         credentials: 'include',

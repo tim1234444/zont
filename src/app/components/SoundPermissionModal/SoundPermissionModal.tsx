@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef} from 'react';
 import './SoundPermissionModal.scss';
 import alarmSound from '../../../assets/silent.wav';
 import { toast } from 'sonner';
