@@ -24,17 +24,14 @@ export const login = async (
   message?: string;
 }> => {
   try {
-    const response = await fetch(
-      '/api/login.php?route=login',
-      {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ password }),
-      }
-    );
+    const response = await fetch('/api/login.php?route=login', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ password }),
+    });
 
     const data = await response.json();
 

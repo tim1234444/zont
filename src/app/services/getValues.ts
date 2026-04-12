@@ -1,4 +1,5 @@
 import type { ZontDevice } from '../utils/interfaces/zont-devices.interface';
+import type { AlertHistoryResponse } from '../utils/types/alertHistory';
 
 export const fetchDevices = async (): Promise<ZontDevice[]> => {
   try {
@@ -75,3 +76,17 @@ export const fetchThresholdValues = async (): Promise<ThresholdItem[]> => {
     }
   }
 };
+
+
+
+export async function fetchAlertHistory(page = 1, eventType: string, minDuration: number): Promise<AlertHistoryResponse> {
+  const params = new URLSearchParams({
+    route: 'getAlertHistory',
+    page: String(page),
+  });
+  if (eventType)    params.append('event_type', eventType);
+  if (minDuration)  params.append('min_duration', String(minDuration));
+  const res = await fetch(`https://zont-gresk.ru/api/updatingValues.php?${params}`);
+  if (!res.ok) throw new Error('Ошибка загрузки истории');
+  return res.json();
+}

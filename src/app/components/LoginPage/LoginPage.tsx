@@ -1,11 +1,13 @@
-import React, { useState, type FormEvent } from 'react';
+import React, { useEffect, useState, type FormEvent } from 'react';
 import './LoginPage.scss';
-import { useNavigate } from 'react-router-dom';
-import { login } from '../../services/authService';
+import { Navigate, useNavigate } from 'react-router-dom';
+import { checkSession, login } from '../../services/authService';
 import { toast } from 'sonner';
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState<string>('');
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -20,12 +22,32 @@ const LoginPage: React.FC = () => {
 
     if (result.success) {
       toast.success('Успешный вход');
-      navigate('/dashboard');
+      navigate('/tech/dashboard');
     } else {
       toast.error(result.message || 'Ошибка авторизации');
     }
   };
 
+  useEffect(() => {
+    const verify = async () => {
+      const auth = await checkSession();
+      setIsAuthenticated(auth);
+      setLoading(false);
+    };
+
+    verify();
+  }, []);
+  if (loading) {
+    return (
+      <div className="container">
+        <div>Загрузка...</div>
+      </div>
+    );
+  }
+
+  if (isAuthenticated) {
+    return <Navigate to="/tech/dashboard" replace />;
+  }
   return (
     <div className="login-container container">
       <form className="login-form" onSubmit={handleSubmit}>

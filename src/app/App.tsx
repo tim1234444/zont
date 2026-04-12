@@ -11,9 +11,9 @@ const App: React.FC = () => {
       <BrowserRouter>
         {' '}
         <Routes>
-          <Route path="/" element={<LoginPage />} />
+          <Route path="/tech" element={<LoginPage />} />
           <Route
-            path="/dashboard"
+            path="/tech/dashboard"
             element={
               <AuthenticatedPage>
                 <DashboardContainer />

@@ -4,7 +4,6 @@ import type {
   ZontSensor,
 } from '../../utils/interfaces/zont-devices.interface';
 import { DevicesSensor } from '../DevicesSensor/DevicesSensor';
-import {useTTSQueue} from '../../hooks/useTTSQueue.ts'
 import { useNotificationsMute } from '../../hooks/useNotificationsMute';
 import type { HeatingSeason, ThresholdItem } from '../../services/getValues';
 import { useRef, useEffect } from 'react';

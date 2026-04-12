@@ -30,6 +30,7 @@ export function useTTSQueue() {
       }
 
       lastRequestTime.current = Date.now();
+      
       const response = await fetch('https://zont-gresk.ru/api/tts.php', {
         method: 'POST',
         body: new URLSearchParams({ text }),

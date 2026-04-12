@@ -1,0 +1,279 @@
+.ah-wrapper {
+  background: #2c3e50;
+  color: #ffffff;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  font-family: 'Inter', sans-serif;
+  width: 100%;
+}
+
+.ah-item--offline {
+  border-left-color: #f39c12;
+}
+
+.ah-badge--offline {
+  background: rgba(243, 156, 18, 0.2);
+  color: #f39c12;
+}
+.ah-title {
+  margin: 0 0 16px;
+  font-size: 20px;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ah-updating {
+  font-size: 13px;
+  font-weight: 400;
+  opacity: 0.5;
+}
+
+.ah-message {
+  font-size: 14px;
+  opacity: 0.6;
+
+  &--error {
+    opacity: 1;
+    color: #e74c3c;
+  }
+}
+
+// Список
+.ah-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+// Карточка события
+.ah-item {
+  background: #34495e;
+  border-radius: 8px;
+  padding: 12px 14px;
+  display: grid;
+  grid-template-columns: 110px 1fr auto auto;
+  align-items: center;
+  gap: 12px;
+  border-left: 3px solid transparent;
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: #3f5870;
+  }
+
+  &--active {
+    border-left-color: #e74c3c;
+  }
+
+  &--resolved {
+    border-left-color: #27ae60;
+  }
+}
+
+.ah-badge {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 20px;
+  white-space: nowrap;
+
+  &--active {
+    background: rgba(231, 76, 60, 0.2);
+    color: #e74c3c;
+  }
+
+  &--resolved {
+    background: rgba(39, 174, 96, 0.2);
+    color: #27ae60;
+  }
+}
+
+.ah-item__main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.ah-item__device {
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ah-item__sensor {
+  font-size: 12px;
+  opacity: 0.6;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ah-item__values {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.ah-item__value {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.ah-item__threshold {
+  font-size: 12px;
+  opacity: 0.5;
+}
+
+.ah-item__time {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.ah-item__date {
+  font-size: 12px;
+  opacity: 0.6;
+  white-space: nowrap;
+}
+
+.ah-item__duration {
+  font-size: 12px;
+  font-weight: 500;
+  opacity: 0.8;
+
+  &--active {
+    color: #e74c3c;
+    opacity: 1;
+  }
+}
+
+// Пагинация
+.ah-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ah-pagination__btn {
+  background: #34495e;
+  border: none;
+  color: #ffffff;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover:not(:disabled) {
+    background: #3f5870;
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+}
+
+.ah-pagination__info {
+  font-size: 14px;
+  opacity: 0.9;
+  margin: 0 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ah-pagination__total {
+  font-size: 12px;
+  opacity: 0.5;
+}
+
+@media (max-width: 600px) {
+  .ah-item {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+
+    .ah-item__status {
+      grid-column: 1;
+    }
+    .ah-item__time {
+      grid-column: 2;
+    }
+    .ah-item__main {
+      grid-column: 1;
+    }
+    .ah-item__values {
+      grid-column: 2;
+    }
+  }
+}
+.ah-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ah-filters__group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.ah-filters__label {
+  font-size: 13px;
+  opacity: 0.5;
+  white-space: nowrap;
+  min-width: 100px;
+}
+
+.ah-filters__btns {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.ah-filter-btn {
+  background: #34495e;
+  border: none;
+  color: #ffffff;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  opacity: 0.7;
+
+  &:hover {
+    background: #3f5870;
+    opacity: 1;
+  }
+
+  &--active {
+    background: #3f5870;
+    opacity: 1;
+    outline: 1px solid rgba(255, 255, 255, 0.3);
+  }
+}
