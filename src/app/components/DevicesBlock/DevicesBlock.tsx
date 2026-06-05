@@ -4,6 +4,8 @@ import type {
 } from '../../utils/interfaces/zont-devices.interface';
 import type { HeatingSeason, ThresholdItem } from '../../services/getValues';
 import DevicesCard from '../DevicesCard/DevicesCard';
+import { HEATING_SEASON_ONLY_SENSORS } from '../../constants/heatingSeasonSensors';
+import { getIsHeatingSeason } from '../../utils/getIsHeatingSeason';
 
 type DeviceConfig = {
   apiName: string;
@@ -29,9 +31,16 @@ export default function DevicesBlock({
 
   const mapSensors = (
     device: ZontDevice,
-    sensorsMap: Record<string, string>
+    sensorsMap: Record<string, string>,
+    heatingSeason: HeatingSeason | undefined
   ): ZontSensor[] =>
     Object.entries(sensorsMap)
+      .filter(([, mappedName]) => {
+        if (HEATING_SEASON_ONLY_SENSORS.includes(mappedName)) {
+          return getIsHeatingSeason(heatingSeason);
+        }
+        return true;
+      })
       .map(([originalName, mappedName]) => {
         const sensor = device.sensors.find(
           (s) => s.name.trim() === originalName
@@ -51,7 +60,7 @@ export default function DevicesBlock({
             key={config.apiName}
             device={device}
             title={config.pageName}
-            sensors={mapSensors(device, config.sensors)}
+            sensors={mapSensors(device, config.sensors, heatingSeason)}
             thresholds={thresholds}
             heatingSeason={heatingSeason}
           />

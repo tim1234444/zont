@@ -5,6 +5,7 @@ import {
   type ThresholdItem,
 } from '../../services/getValues';
 import { HEATING_TEMPERATURE_SENSOR } from '../../constants/mainConstants';
+import { getIsHeatingSeason } from '../../utils/getIsHeatingSeason';
 type Props = {
   title: string;
   sensor: ZontSensor;
@@ -37,15 +38,10 @@ export const DevicesSensor: React.FC<Props> = ({
     };
   }, [sensor.value, threshold.min, threshold.max]);
 
-  const isHeatingSeason = useMemo(() => {
-    if (!heatingSeason) return false;
-
-    const now = new Date();
-    const start = new Date(heatingSeason.heating_start_date);
-    const end = new Date(heatingSeason.heating_end_date);
-
-    return now >= start && now <= end;
-  }, [heatingSeason]);
+  const isHeatingSeason = useMemo(
+    () => getIsHeatingSeason(heatingSeason),
+    [heatingSeason]
+  );
   useEffect(() => {
     if (muted) return;
     if (!isOutOfRange) {
@@ -65,7 +61,6 @@ export const DevicesSensor: React.FC<Props> = ({
       ? `Внимание! Датчик, ${sensor.name}, объекта, ${title}, превысил верхний порог.`
       : `Внимание! Датчик, ${sensor.name}, объекта, ${title}, опустился ниже нижнего порога.`;
 
-    
     speak(message);
     wasOutOfRange.current = true;
   }, [
