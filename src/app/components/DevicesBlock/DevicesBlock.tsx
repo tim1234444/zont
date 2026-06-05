@@ -22,7 +22,7 @@ export default function DevicesBlock({
   devicesConfig,
   devices,
   thresholds,
-  heatingSeason
+  heatingSeason,
 }: Props) {
   const getDeviceByName = (name: string) =>
     devices.find((d) => d.name.trim() === name);
@@ -31,12 +31,14 @@ export default function DevicesBlock({
     device: ZontDevice,
     sensorsMap: Record<string, string>
   ): ZontSensor[] =>
-    device.sensors
-      .filter((s) => s.name.trim() in sensorsMap)
-      .map((sensor) => ({
-        ...sensor,
-        name: sensorsMap[sensor.name.trim()],
-      }));
+    Object.entries(sensorsMap)
+      .map(([originalName, mappedName]) => {
+        const sensor = device.sensors.find(
+          (s) => s.name.trim() === originalName
+        );
+        return sensor ? { ...sensor, name: mappedName } : null;
+      })
+      .filter((s): s is ZontSensor => s !== null);
 
   return (
     <>

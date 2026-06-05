@@ -4,6 +4,8 @@ import { HeatingSeasonCard } from '../HeatingSeasonCard/HeatingSeasonCard';
 import SoundPermissionModal from '../SoundPermissionModal/SoundPermissionModal';
 import { useState } from 'react';
 import AlertHistory from '../AlertHistory/AlertHistory';
+import { WeatherCard } from '../WeatherCard/WeatherCard';
+import TextInfo from '../TextInfo/TextInfo';
 
 export default function DashboardContainer() {
   const [soundEnabled, setSoundEnabled] = useState(false);
@@ -20,6 +22,8 @@ export default function DashboardContainer() {
       <div className="sensors-panel container">
         <SensorsPanel />
         <HeatingSeasonCard />
+        <WeatherCard />
+        <TextInfo />
       </div>
       <div className="container">
         <AlertHistory />
