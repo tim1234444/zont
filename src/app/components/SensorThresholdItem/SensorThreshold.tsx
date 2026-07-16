@@ -8,6 +8,8 @@ interface Props {
   maxInitialValue: number;
   minLimit?: number;
   maxLimit?: number;
+  recommendedMin?: number;
+  recommendedMax?: number;
 }
 
 export const SensorThreshold: React.FC<Props> = ({
@@ -16,6 +18,8 @@ export const SensorThreshold: React.FC<Props> = ({
   maxInitialValue,
   minLimit = 0,
   maxLimit = 100,
+  recommendedMin,
+  recommendedMax,
 }) => {
   const [minValue, setMinValue] = useState(+minInitialValue);
   const [maxValue, setMaxValue] = useState(+maxInitialValue);
@@ -26,7 +30,14 @@ export const SensorThreshold: React.FC<Props> = ({
 
       <div className="full-block">
         <div className="full-info">
-          <span>Минимум</span>
+          <span>
+            Минимум{' '}
+            {recommendedMin !== undefined && (
+              <span className="recommended-text">
+                (рекомендуемое {recommendedMin})
+              </span>
+            )}
+          </span>
           <span className="full-number">{minValue}</span>
         </div>
 
@@ -61,7 +72,14 @@ export const SensorThreshold: React.FC<Props> = ({
 
       <div className="full-block">
         <div className="full-info">
-          <span>Максимум</span>
+          <span>
+            Максимум{' '}
+            {recommendedMax !== undefined && (
+              <span className="recommended-text">
+                (рекомендуемое {recommendedMax})
+              </span>
+            )}
+          </span>
           <span className="full-number">{maxValue}</span>
         </div>
 
@@ -93,7 +111,11 @@ export const SensorThreshold: React.FC<Props> = ({
           </button>
         </div>
       </div>
-      <ChangeThresholdButton name={title} newMinValue={minValue} newMaxValue={maxValue}></ChangeThresholdButton>
+      <ChangeThresholdButton
+        name={title}
+        newMinValue={minValue}
+        newMaxValue={maxValue}
+      ></ChangeThresholdButton>
     </div>
   );
 };
