@@ -159,3 +159,54 @@
   box-shadow: 0 0 12px 2px rgba(26, 188, 156, 0.3);
   border: 2px solid #1abc9c;
 }
+.card__checkbox--maintenance {
+  input:checked + .card__checkmark {
+    background-color: #e67e22;
+    border-color: #d35400;
+  }
+}
+
+.card--maintenance {
+  opacity: 0.75;
+  background: linear-gradient(135deg, #fef9f3 0%, #fdf2e9 100%);
+  border: 2px dashed #e67e22;
+  box-shadow: 0 0 12px 2px rgba(230, 126, 34, 0.2);
+}
+
+.card__maintenance-overlay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 12px;
+  gap: 8px;
+}
+
+.card__maintenance-icon {
+  font-size: 36px;
+  animation: spin-wrench 3s ease-in-out infinite;
+}
+
+.card__maintenance-text {
+  font-size: 15px;
+  font-weight: 600;
+  color: #d35400;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+@keyframes spin-wrench {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(20deg);
+  }
+  50% {
+    transform: rotate(-20deg);
+  }
+  75% {
+    transform: rotate(10deg);
+  }
+}

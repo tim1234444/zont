@@ -13,6 +13,7 @@ type Props = {
   speak: (text: string) => void;
   muted: boolean;
   heatingSeason?: HeatingSeason;
+  isReady: boolean;
 };
 export const DevicesSensor: React.FC<Props> = ({
   title,
@@ -21,6 +22,7 @@ export const DevicesSensor: React.FC<Props> = ({
   speak,
   muted,
   heatingSeason,
+  isReady,
 }) => {
   if (sensor.value === null || sensor.value === undefined) return null;
 
@@ -43,27 +45,26 @@ export const DevicesSensor: React.FC<Props> = ({
     [heatingSeason]
   );
   useEffect(() => {
-    if (muted) return;
+    if (muted || !isReady) return;
     if (!isOutOfRange) {
       wasOutOfRange.current = false;
       return;
     }
 
     if (wasOutOfRange.current) return;
-    if (
-      sensor.name === HEATING_TEMPERATURE_SENSOR &&
-      heatingSeason &&
-      !isHeatingSeason
-    ) {
+    const isHeatingSensor = sensor.name === HEATING_TEMPERATURE_SENSOR;
+    if (isHeatingSensor && heatingSeason && !isHeatingSeason) {
+      wasOutOfRange.current = false;
       return;
     }
     const message = isAboveMax
-      ? `Внимание! Датчик, ${sensor.name}, объекта, ${title}, превысил верхний порог.`
-      : `Внимание! Датчик, ${sensor.name}, объекта, ${title}, опустился ниже нижнего порога.`;
+      ? `Внимание! Датчик ${sensor.name} объекта ${title} превысил верхний порог.`
+      : `Внимание! Датчик ${sensor.name} объекта ${title} опустился ниже нижнего порога.`;
 
     speak(message);
     wasOutOfRange.current = true;
   }, [
+    isReady,
     isOutOfRange,
     isAboveMax,
     isHeatingSeason,
