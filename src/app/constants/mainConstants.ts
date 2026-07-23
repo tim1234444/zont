@@ -85,3 +85,19 @@ export const DEVICES_INFO: Record<
   ],
 };
 export const HEATING_TEMPERATURE_SENSOR = 'Температура отопления';
+
+const API_NAME_TO_PAGE_NAME: Record<string, string> = Object.values(
+  DEVICES_INFO
+)
+  .flat()
+  .reduce(
+    (acc, d) => {
+      acc[d.apiName] = d.pageName;
+      return acc;
+    },
+    {} as Record<string, string>
+  );
+
+export function resolveDeviceName(apiName: string): string {
+  return API_NAME_TO_PAGE_NAME[apiName] ?? apiName;
+}

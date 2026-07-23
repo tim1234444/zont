@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import './AlertHistory.scss';
 import { fetchAlertHistory } from '../../services/getValues';
+import { resolveDeviceName } from '../../constants/mainConstants';
 
 function formatDuration(from: string, to: string | null): string {
   const start = new Date(from).getTime();
@@ -122,7 +123,10 @@ export default function AlertHistory() {
                   </div>
 
                   <div className="ah-item__main">
-                    <span className="ah-item__device">{item.device_name}</span>
+                    <span className="ah-item__device">
+                      {' '}
+                      {resolveDeviceName(item.device_name)}
+                    </span>
                     <span className="ah-item__sensor">
                       {isOffline ? 'Устройство недоступно' : item.sensor_name}
                     </span>
