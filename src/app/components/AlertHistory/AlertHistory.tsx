@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import './AlertHistory.scss';
 import { fetchAlertHistory } from '../../services/getValues';
 import { resolveDeviceName } from '../../constants/mainConstants';
+import ActiveOnlyToggle from './ActiveOnlyToggle/ActiveOnlyToggle';
 
 function formatDuration(from: string, to: string | null): string {
   const start = new Date(from).getTime();
@@ -20,12 +21,13 @@ export default function AlertHistory() {
   const [page, setPage] = useState(1);
   const [eventType, setEventType] = useState('');
   const [minDuration, setMinDuration] = useState(0);
-
+  const [activeOnly, setActiveOnly] = useState(false);
   const { data, isLoading, isError, isFetching } = useQuery({
-    queryKey: ['alertHistory', page, eventType, minDuration],
+    queryKey: ['alertHistory', page, eventType, minDuration, activeOnly],
 
-    queryFn: () => fetchAlertHistory(page, eventType, minDuration),
-    staleTime: 30_000,
+    queryFn: () => fetchAlertHistory(page, eventType, minDuration, activeOnly),
+    refetchInterval: 30_000,
+    refetchIntervalInBackground: true,
     placeholderData: (prev) => prev,
   });
 
@@ -37,6 +39,10 @@ export default function AlertHistory() {
     setMinDuration(val);
     setPage(1);
   };
+  const handleActiveOnly = (val: boolean) => {
+    setActiveOnly(val);
+    setPage(1);
+  };
   return (
     <div className="ah-wrapper">
       <h2 className="ah-title">
@@ -44,6 +50,15 @@ export default function AlertHistory() {
         {isFetching && <span className="ah-updating">обновление...</span>}
       </h2>
       <div className="ah-filters">
+        <div className="ah-filters__group">
+          <span className="ah-filters__label">Статус</span>
+          <div className="ah-filters__btns">
+            <ActiveOnlyToggle
+              isActiveOnly={activeOnly}
+              onToggle={handleActiveOnly}
+            />
+          </div>
+        </div>
         <div className="ah-filters__group">
           <span className="ah-filters__label">Тип события</span>
           <div className="ah-filters__btns">

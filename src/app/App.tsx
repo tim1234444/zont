@@ -12,14 +12,7 @@ const App: React.FC = () => {
         {' '}
         <Routes>
           <Route path="/tech" element={<LoginPage />} />
-          <Route
-            path="/tech/dashboard"
-            element={
-              <AuthenticatedPage>
-                <DashboardContainer />
-              </AuthenticatedPage>
-            }
-          />{' '}
+          <Route path="/tech/dashboard" element={<DashboardContainer />} />{' '}
         </Routes>
       </BrowserRouter>
     </TTSProvider>

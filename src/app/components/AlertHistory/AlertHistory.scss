@@ -277,3 +277,10 @@
     outline: 1px solid rgba(255, 255, 255, 0.3);
   }
 }
+.ah-filter-btn--toggle {
+  &.ah-filter-btn--active {
+    background: rgba(231, 76, 60, 0.2);
+    color: #e74c3c;
+    outline: 1px solid rgba(231, 76, 60, 0.4);
+  }
+}
