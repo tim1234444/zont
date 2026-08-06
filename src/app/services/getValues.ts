@@ -1,3 +1,7 @@
+import {
+  EventFilter,
+  type EventFilterType,
+} from '../components/AlertHistory/EventFilters/EventFilters';
 import type { ZontDevice } from '../utils/interfaces/zont-devices.interface';
 import type { AlertHistoryResponse } from '../utils/types/alertHistory';
 
@@ -81,7 +85,7 @@ export async function fetchAlertHistory(
   page = 1,
   eventType: string,
   minDuration: number,
-  activeOnly: boolean = false
+  activeOnly: EventFilterType = EventFilter.All
 ): Promise<AlertHistoryResponse> {
   const params = new URLSearchParams({
     route: 'getAlertHistory',
@@ -89,7 +93,7 @@ export async function fetchAlertHistory(
   });
   if (eventType) params.append('event_type', eventType);
   if (minDuration) params.append('min_duration', String(minDuration));
-  if (activeOnly) params.append('active_only', '1');
+  if (activeOnly === EventFilter.Active) params.append('active_only', '1');
 
   const res = await fetch(
     `https://zont-gresk.ru/api/updatingValues.php?${params}`

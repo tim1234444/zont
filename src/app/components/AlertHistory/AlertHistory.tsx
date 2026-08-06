@@ -3,7 +3,10 @@ import { useQuery } from '@tanstack/react-query';
 import './AlertHistory.scss';
 import { fetchAlertHistory } from '../../services/getValues';
 import { resolveDeviceName } from '../../constants/mainConstants';
-import ActiveOnlyToggle from './ActiveOnlyToggle/ActiveOnlyToggle';
+import ActiveOnlyToggle, {
+  EventFilter,
+  type EventFilterType,
+} from './EventFilters/EventFilters';
 
 function formatDuration(from: string, to: string | null): string {
   const start = new Date(from).getTime();
@@ -21,7 +24,9 @@ export default function AlertHistory() {
   const [page, setPage] = useState(1);
   const [eventType, setEventType] = useState('');
   const [minDuration, setMinDuration] = useState(0);
-  const [activeOnly, setActiveOnly] = useState(false);
+  const [activeOnly, setActiveOnly] = useState<EventFilterType>(
+    EventFilter.All
+  );
   const { data, isLoading, isError, isFetching } = useQuery({
     queryKey: ['alertHistory', page, eventType, minDuration, activeOnly],
 
@@ -39,7 +44,7 @@ export default function AlertHistory() {
     setMinDuration(val);
     setPage(1);
   };
-  const handleActiveOnly = (val: boolean) => {
+  const handleActiveOnly = (val: EventFilterType) => {
     setActiveOnly(val);
     setPage(1);
   };
@@ -52,12 +57,8 @@ export default function AlertHistory() {
       <div className="ah-filters">
         <div className="ah-filters__group">
           <span className="ah-filters__label">Статус</span>
-          <div className="ah-filters__btns">
-            <ActiveOnlyToggle
-              isActiveOnly={activeOnly}
-              onToggle={handleActiveOnly}
-            />
-          </div>
+
+          <ActiveOnlyToggle value={activeOnly} onChange={handleActiveOnly} />
         </div>
         <div className="ah-filters__group">
           <span className="ah-filters__label">Тип события</span>
